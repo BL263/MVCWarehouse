@@ -4,7 +4,7 @@ import com.warehouse.mvcproject.domain.Product
 import com.warehouse.mvcproject.dto.ProductDto
 import org.springframework.stereotype.Service
 
-@Service
+
 interface ProductService {
      fun getAllProducts(): List<Product>
      fun getAllProductsByCategory(category: String): MutableIterable<ProductDto>?

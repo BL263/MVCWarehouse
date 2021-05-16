@@ -17,7 +17,8 @@ class ProductServiceImpl : ProductService {
 lateinit var productRepository: ProductRepository
 
      override fun getAllProducts(): List<Product> {
-        return try {     productRepository.findAll()
+        return try {
+            productRepository.findAll()
         } catch(ex: Exception) {
             throw ex
         }
@@ -31,7 +32,8 @@ lateinit var productRepository: ProductRepository
     }
     override  fun getProduct(id:Long):  Product {
         return try {
-            productRepository.findProductById(id)
+          val product=  productRepository.findById(id).get()
+            product
         } catch(ex: Exception) {
             throw ex
         }

@@ -6,6 +6,7 @@ import javax.persistence.*
 @Entity
 class Product(
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
     var name: String? = null,
     var category: String? = null,

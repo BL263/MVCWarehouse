@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ProductRepository: CrudRepository<Product, Long> {
-     fun findProductById(id: Long): Product
+
    fun findProductByCategory(category: String): MutableList<Product>
     override fun findAll(): List<Product>
     @Modifying
