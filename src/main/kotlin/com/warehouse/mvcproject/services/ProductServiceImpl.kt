@@ -39,7 +39,10 @@ lateinit var productRepository: ProductRepository
         }
     }
     override  fun patchProduct(productID :Long, value:   Long)  {
-       productRepository.updateQuantityOfProduct(productID, value)
+        val product = productRepository.findById(productID).get()
+            if (product.id != null && (product.quantity?.toLong()?.plus(value))!! > 0)
+                product.quantity=  ( product.quantity!!.toLong()+value).toString()
+             productRepository.save(product)
     }
     override  fun addProduct(productdto: ProductDto){
         val product=Product(id=null, name = productdto.Name,category = productdto.Category,

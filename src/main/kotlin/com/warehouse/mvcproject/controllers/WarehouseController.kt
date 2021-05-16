@@ -30,14 +30,18 @@ class WarehouseController {
 
     @PatchMapping("/products/{productID}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-     fun patchProduct(@PathVariable productID: Long, @RequestBody quantity:  Long): ResponseEntity<Any> {
+    fun patchProduct(@PathVariable productID: Long, @RequestBody() quantity: Map<String,String>): ResponseEntity<Any> {
         return try {
-            if (productID != null)
-            {
-                productService.patchProduct(productID,quantity)
-                ResponseEntity.ok(productID)
-            }
-            else ResponseEntity.badRequest().body("Bad Request Message")
+            if (productID != null) {
+                val quantity_long = quantity["quantity"]?.toLongOrNull()
+                if (quantity_long != null) {
+                    productService.patchProduct(productID, quantity_long)
+                    ResponseEntity.ok(productID)
+
+                } else {
+                    ResponseEntity.badRequest().body("Bad Request Message")
+                }
+            } else ResponseEntity.badRequest().body("Bad Request Message")
         } catch (e: SpelEvaluationException) {
             ResponseEntity.badRequest().body("Bad Request Message")
         }
@@ -53,14 +57,13 @@ class WarehouseController {
     }
 
     @GetMapping("/products/{productID}")
-     fun getProduct(@PathVariable productID: String):  ProductDto  {
-        return productService.getProduct(productID.toLong()).toDTO()
+     fun getProduct(@PathVariable productID: String): ResponseEntity<Any>? {
+        return  ResponseEntity(productService.getProduct(productID.toLong()).toDTO(),HttpStatus.OK)
     }
 
-    @GetMapping("/productsByCategory?category={category}")
-    @ResponseStatus(HttpStatus.OK)
-     fun getAllProductsByCategory(@PathVariable category: String): MutableIterable<ProductDto>? {
-        return productService.getAllProductsByCategory(category)
+    @GetMapping("/productsByCategory")
+     fun getAllProductsByCategory(@RequestParam category: String): ResponseEntity<Any>? {
+        return  ResponseEntity(productService.getAllProductsByCategory(category),HttpStatus.OK)
     }
 
 }
